@@ -20,7 +20,8 @@ INSERT INTO Mechanic VALUES (24,'Smith','8887124003',20.00);
 
 
 --RepairJob Table
-
+INSERT INTO RepairJob VALUES (1,'A1111',CURRENT_TIMESTAMP,NULL,24,2.00,NULL);
+INSERT INTO RepairJob VALUES (2,'A2222',CURRENT_TIMESTAMP,NULL,43,4.50,NULL);
 
 --Parts Table
 INSERT INTO Parts VALUES ('Nut',100.00);
@@ -28,7 +29,6 @@ INSERT INTO Parts VALUES ('Bolt',500.00);
 
 
 --PartsUsed Table
-
 
 
 --ProblemsFixed Table
