@@ -1,14 +1,13 @@
---Car Table
-INSERT INTO Car VALUES ('A1111','H1234','4081234567');
-INSERT INTO Car VALUES ('A2222','V2346','6712834567');
-
-
 --Customer Table
 INSERT INTO Customers VALUES ('4081234567','Bebla','124 Willow St. Santa Clara, CA 95053');
 INSERT INTO Customers VALUES ('6712834567','Chan','349 Dimple St. Sunnyvale, CA 94043');
 INSERT INTO Customers VALUES ('8889876543','Jacobs','444 Nowhere Lane Cupertino, CA 94024');
 INSERT INTO Customers VALUES ('1009627236','Stevens','666 Devil St. San Francisco, CA 94666');
 INSERT INTO Customers VALUES ('3339238293','Jones','180 Lala Ave. San Jose, CA 95555');
+
+--Car Table
+INSERT INTO Car VALUES ('A1111','H1234','4081234567');
+INSERT INTO Car VALUES ('A2222','V2346','6712834567');
 
 
 --Problem Table
