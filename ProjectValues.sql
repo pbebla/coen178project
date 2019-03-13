@@ -36,8 +36,9 @@ INSERT INTO Parts VALUES ('Jack',799.99);
 
 
 --PartsUsed Table
-INSERT INTO PartsUsed VALUES ('Nut',1);
-INSERT INTO PartsUsed VALUES ('Bolt',2);
+INSERT INTO PartsUsed VALUES (11,'Nut');
+INSERT INTO PartsUsed VALUES (27,'Bolt');
+INSERT INTO PartsUsed VALUES (27,'Tin');
 
 --ProblemsFixed Table
 INSERT INTO ProblemsFixed VALUES (11,1);
