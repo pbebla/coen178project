@@ -26,10 +26,13 @@ INSERT INTO RepairJob VALUES (2,'A2222',CURRENT_TIMESTAMP,NULL,43,4.50,NULL);
 --Parts Table
 INSERT INTO Parts VALUES ('Nut',100.00);
 INSERT INTO Parts VALUES ('Bolt',500.00);
+INSERT INTO Parts VALUES ('Tin',75.00);
+INSERT INTO Parts VALUES ('Jack',799.99);
 
 
 --PartsUsed Table
-
+INSERT INTO PartsUsed VALUES ('Nut',1);
+INSERT INTO PartsUsed VALUES ('Bolt',2);
 
 --ProblemsFixed Table
 
