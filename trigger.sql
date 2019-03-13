@@ -1,4 +1,3 @@
---STILL IN THE PROCESS OF DEBUGGING
 CREATE OR Replace TRIGGER createbill 
 AFTER UPDATE ON RepairJob 
 FOR EACH ROW
@@ -15,6 +14,7 @@ Select cost into pcost from Parts where pname=names;
 
 update RepairJob
 set bill = 30 + pcost + (25*:new.laborhrs)
+where :new.time_out<>:old.time_out;
 
 END IF; 
 END;
