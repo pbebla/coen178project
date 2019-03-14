@@ -57,7 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 function PostToDB($name, $phone, $addr, $carno, $carmod, $problem){
 	//connect to your database
-	$conn=oci_connect('myeon','mamaluigi1', '//dbserver.engr.scu.edu/db11g');
+	$conn=oci_connect('myeon','<password>', '//dbserver.engr.scu.edu/db11g');
 	if(!$conn) {
 	     print "<br> Connection to database failed. Please try again.";
         exit;
