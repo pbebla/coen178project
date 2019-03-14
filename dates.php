@@ -9,9 +9,15 @@
 	<h1>We will find the repair jobs between dates.</h1>
 </header>
 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-  Please give us a year: <input type="text" name="num" id="num">
+  Enter a start date: <input type="text" name="start" id="start">
   <input type="submit" value="Submit">
  </form>
+ <br/>
+ <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+  Enter an end date: <input type="text" name="start" id="start">
+  <input type="submit" value="Submit">
+ </form>
+ <br/>
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     # collect input data
@@ -25,15 +31,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 function getFromDB($num){
 	//connect to your database
-	$conn=oci_connect('myeon','<password>', '//dbserver.engr.scu.edu/db11g');
+	$conn=oci_connect('myeon','mamaluigi1', '//dbserver.engr.scu.edu/db11g');
 	if(!$conn) {
 	     print "<br> connection failed:";
         exit;
 	}
-	//Parse the SQL query for bill
-	$query = oci_parse($conn, "SELECT sum(laborhrs) FROM RepairJob where car_license_no= :bv");
+	//Parse the SQL query for RepairJobs
+	$query = oci_parse($conn, "SELECT * FROM Repairlog where time_in > $time");
 
-	oci_bind_by_name($query,':bv',$num);
 	// Execute the query
 	oci_execute($query);
 
