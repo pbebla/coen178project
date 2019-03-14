@@ -9,7 +9,7 @@
 	<h1>We will find total amount from bills between dates.</h1>
 </header>
 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-  Enter a start date Format(: <input type="text" name="start" id="start">
+  Enter a start date: <input type="text" name="start" id="start">
   <input type="submit" value="Submit">
  </form>
  <br/>
