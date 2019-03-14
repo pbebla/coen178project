@@ -17,7 +17,7 @@
 </form>
 <br/>
 <form>
-	<input type="button" value="Show repair jobs between dates" onclick="http://linux.students.engr.scu.edu/~myeon/dates.php'" />
+	<input type="button" value="Show repair jobs between dates" onclick="window.location.href="http://linux.students.engr.scu.edu/~myeon/dates.php'" />
 </form>
 <br/>
 <form>
