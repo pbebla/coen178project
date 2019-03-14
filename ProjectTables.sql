@@ -6,4 +6,4 @@ create table RepairJob(repairjobId int primary key, car_license_no varchar(5), t
 create table Parts(pname varchar(20) primary key, cost decimal(*,2));
 create table PartsUsed(repairjobId int, pname varchar(20), foreign key(repairJobId) references RepairJob(repairjobId), foreign key(pname) references Parts(pname), primary key(repairjobId, pname));
 create table ProblemsFixed(repairjobId int, problem_id int, foreign key(repairjobId) references RepairJob(repairjobId), foreign key(problem_id) references Problem(problem_id), primary key(repairjobId, problem_id));
-create table RepairLog(repairjobId int primary key, car_license_no varchar(5), time_in timestamp(0), time_out(0) timestamp not null, emp_id int, laborhrs decimal(*,2), bill decimal(*,2), foreign key(car_license_no) references Car(car_license_no), foreign key(emp_id) references Mechanic(emp_id));
+create table RepairLog(repairjobId int primary key, car_license_no varchar(5), time_in timestamp(0), time_out timestamp(0) not null, emp_id int, laborhrs decimal(*,2), bill decimal(*,2), foreign key(car_license_no) references Car(car_license_no), foreign key(emp_id) references Mechanic(emp_id));
