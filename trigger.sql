@@ -1,22 +1,20 @@
 CREATE OR Replace TRIGGER createbill 
-AFTER UPDATE ON RepairJob 
+AFTER UPDATE of time_out ON RepairJob 
 FOR EACH ROW
 
 DECLARE
-r_id integer := :new.repairjobId;
-names varchar2(20);
 pcost decimal;
+r_bill decimal;
 
-BEGIN 
-IF :new.time_out<>:old.time_out THEN
-Select pname into names from PartsUsed where repairjobId=r_id;
-Select cost into pcost from Parts where pname=names;
+BEGIN
+Select sum(cost) into pcost from Parts where pname in (select pname from PartsUsed where repairjobId=:old.repairjobid);
 
-update RepairJob
-set bill = 30 + pcost + (25*:new.laborhrs)
-where :new.time_out<>:old.time_out;
+r_bill := (30 + pcost + (25*:old.laborhrs));
 
-END IF; 
+insert into repairlog values (:old.repairjobid,:old.car_license_no,:old.time_in,:new.time_out,:old.emp_id,:old.laborhrs,r_bill);
+
+dbms_output.put_line('The Bill is: '||r_bill);
+
 END;
 / 
 Show errors;
