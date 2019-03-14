@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 function getFromDB($num){
 	//connect to your database
-	$conn=oci_connect('myeon','mamaluigi1', '//dbserver.engr.scu.edu/db11g');
+	$conn=oci_connect('myeon','<password>', '//dbserver.engr.scu.edu/db11g');
 	if(!$conn) {
 	     print "<br> connection failed:";
         exit;
