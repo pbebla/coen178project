@@ -2,19 +2,19 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8"/>
-      <title>Show Repair Jobs Between Dates</title>
+      <title>Show Total Bills Between Dates</title>
    </head>
    <body>
 <header>
-	<h1>We will find the repair jobs between dates.</h1>
+	<h1>We will find total amount from bills between dates.</h1>
 </header>
 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-  Enter a start date: <input type="text" name="start" id="start">
+  Enter a start date Format(: <input type="text" name="start" id="start">
   <input type="submit" value="Submit">
  </form>
  <br/>
  <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-  Enter an end date: <input type="text" name="start" id="start">
+  Enter an end date: <input type="text" name="end" id="end">
   <input type="submit" value="Submit">
  </form>
  <br/>
@@ -25,11 +25,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
      if (!empty($num)){
 		$num = prepareInput($num);
-		$data = getFromDB($num);
-		echo "Total pay for hours worked on for your car are: $data<br>\n";
+		$data = getFromDB($start,$end);
+		echo "Bills are: $data<br>\n";
 	 }
 }
-function getFromDB($num){
+function getFromDB($start,$end){
 	//connect to your database
 	$conn=oci_connect('myeon','mamaluigi1', '//dbserver.engr.scu.edu/db11g');
 	if(!$conn) {
@@ -37,7 +37,7 @@ function getFromDB($num){
         exit;
 	}
 	//Parse the SQL query for RepairJobs
-	$query = oci_parse($conn, "SELECT * FROM Repairlog where time_in > $time");
+	$query = oci_parse($conn, "SELECT calcTotalBill ($start,$end)");
 
 	// Execute the query
 	oci_execute($query);
