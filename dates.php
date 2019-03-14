@@ -10,25 +10,26 @@
 </header>
 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
   Enter a start date: <input type="text" name="start" id="start">
-  <input type="submit" value="Submit">
  </form>
  <br/>
  <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
   Enter an end date: <input type="text" name="end" id="end">
-  <input type="submit" value="Submit">
  </form>
  <br/>
+<form>
+	<input type="submit" value="Submit">
+ </form>
+<br/>
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     # collect input data
-     $num = $_POST['num'];
+     $start = $_POST['start'];
+	 $end = $_POST['end'];
+	 $data = getFromDB($start,$end);
+	 echo "Total amount from bills between those dates is: $data<br>\n";
 
-     if (!empty($num)){
-		$num = prepareInput($num);
-		$data = getFromDB($start,$end);
-		echo "Bills are: $data<br>\n";
-	 }
 }
+
 function getFromDB($start,$end){
 	//connect to your database
 	$conn=oci_connect('myeon','mamaluigi1', '//dbserver.engr.scu.edu/db11g');
@@ -37,8 +38,9 @@ function getFromDB($start,$end){
         exit;
 	}
 	//Parse the SQL query for RepairJobs
-	$query = oci_parse($conn, "SELECT calcTotalBill ($start,$end)");
-
+	$query = oci_parse($conn, "SELECT calcTotalBill(:s,:e)");
+	oci_bind_by_name($query,':s',$start);
+	oci_bind_by_name($query,':e',$end);
 	// Execute the query
 	oci_execute($query);
 
@@ -49,12 +51,12 @@ function getFromDB($start,$end){
 		$total = $row[0];
 	}
 	else {
-		exit("I'm sorry but your bill is not generated yet\n");
+		exit("I'm sorry but no bill exists in the database\n");
 	}
 	oci_free_statement($query);
 	oci_close($conn);
 
-	return $total*20;
+	return $total;
 }
 
 function prepareInput($inputData){
