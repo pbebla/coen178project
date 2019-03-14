@@ -1,5 +1,6 @@
 -- 1.3(e): function to show amount of money generated from customer billing 
 -- start/end dates given as parameters
+-- dates are given in TIMESTAMP format: 'dd-mm-yy hh.mm.ss'
 
 Create or Replace Function calcTotalBill (start_date IN TIMESTAMP, end_date IN TIMESTAMP)
 RETURN DECIMAL
