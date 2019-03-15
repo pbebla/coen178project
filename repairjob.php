@@ -10,35 +10,23 @@
 </header>
 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
   Last Name: <input type="text" name="lastname" id="lastname">
- </form>
 <br/>
-<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
   Phone: <input type="text" name="phone" id="phone">
- </form>
 <br/>
-<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
   Address: <input type="text" name="addr" id="addr">
- </form>
 <br/>
-<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
   Car Model: <input type="text" name="carmod" id="carmod">
- </form>
 <br/>
-<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
   Car License No: <input type="text" name="carno" id="carno">
- </form>
 <br/>
-<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-  Please select from the list of problems: <select one>
-  <option name="prob" value="Battery">Battery</option>
-  <option name="prob" value="Engine">Engine</option>
-  <option name="prob" value="Tires">Tires</option>
-  <option name="prob" value="Windows">Windows</option>
-  <option name="prob" value="Mirrors">Mirrors</option>
+  Please select from the list of problems: <select name="prob">
+  <option value="Battery">Battery</option>
+  <option value="Engine">Engine</option>
+  <option value="Tires">Tires</option>
+  <option value="Windows">Windows</option>
+  <option value="Mirrors">Mirrors</option>
 	</select> 
- </form>
 <br/>
- <form>
 	<input type="submit" value="Submit">
  </form>
 
@@ -59,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 function PostToDB($name, $phone, $addr, $carno, $carmod, $problem){
 	//connect to your database
-	$conn=oci_connect('myeon','mamaluigi1', '//dbserver.engr.scu.edu/db11g');
+	$conn=oci_connect('','', '//dbserver.engr.scu.edu/db11g');
 	if(!$conn) {
 	     print "<br> Connection to database failed. Please try again.";
         exit;
@@ -78,7 +66,7 @@ function PostToDB($name, $phone, $addr, $carno, $carmod, $problem){
 
 
 	//SQL INSERT FOR CAR TABLE
-	$sql2 = "INSERT INTO Car car_license_no,model,cphone)'. 'VALUES (:p4,:p5,:p6)')";
+	$sql2 = "INSERT INTO Car (car_license_no,model,cphone)"."VALUES (:p4,:p5,:p6)";
 	$insert = oci_parse($conn, $sql2);
 
 	oci_bind_by_name($insert,':p4',$carno);
@@ -125,7 +113,7 @@ function PostToDB($name, $phone, $addr, $carno, $carmod, $problem){
 
 
 	//SQL INSERT FOR PROBLEMFIXED TABLE
-	$sql3 = "INSERT INTO ProblemsFixed(repairjobId,problem_id)'. 'VALUES (:p7,:p8)')";
+	$sql3 = "INSERT INTO ProblemsFixed(repairjobId,problem_id)"."VALUES (:p7,:p8)";
 	$insert = oci_parse($conn, $sql3);
 
 	oci_bind_by_name($insert,':p7',$max);
@@ -136,7 +124,7 @@ function PostToDB($name, $phone, $addr, $carno, $carmod, $problem){
 
 
 	//CREATE THE REPAIR JOB
-	$sql4 = "INSERT INTO RepairJob(repairjobId,car_license_no,time_in,time_out,emp_id,laborhrs)'. 'VALUES (:p8,:p4,CURRENT_TIMESTAMP,NULL,NULL,NULL,NULL)')";
+	$sql4 = "INSERT INTO RepairJob(repairjobId,car_license_no,time_in,time_out,emp_id,laborhrs)". "VALUES (:p8,:p4,CURRENT_TIMESTAMP,NULL,NULL,NULL,NULL)";
 	$insert = oci_parse($conn, $sql4);
 	// Execute the insert statement
 	oci_execute($insert);
