@@ -39,7 +39,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
      $carmod = $_POST['carmod'];
      $carno = $_POST['carno'];
 	 $problem = $_POST['prob'];
-	echo "Your data has been added successfully";
 	PostToDB($name, $phone, $addr, $carno, $carmod, $problem);
 	echo "Your data has been added successfully";
 }
@@ -54,9 +53,6 @@ function PostToDB($name, $phone, $addr, $carno, $carmod, $problem){
 	$sql1 = "INSERT INTO Customers VALUES('$phone','$name','$addr')";
 	$insert = oci_parse($conn, $sql1);
 	
-//	oci_bind_by_name($insert,':p1',$phone);
-//	oci_bind_by_name($insert,':p2',$name);
-//	oci_bind_by_name($insert,':p3',$addr);
 	// Execute the insert statement
 	oci_execute($insert);
 	//SQL INSERT FOR CAR TABLE
@@ -97,7 +93,6 @@ function PostToDB($name, $phone, $addr, $carno, $carmod, $problem){
 	{
 		$max=1;
 	}
-
 	$query2 = oci_parse($conn, "SELECT emp_id FROM Mechanic");
 	oci_execute($query2);
 	$isFound = false;
@@ -108,7 +103,6 @@ function PostToDB($name, $phone, $addr, $carno, $carmod, $problem){
 			$isFound = true;
 		}
 	}
-
 	//CREATE THE REPAIR JOB
 	$sql4 = "INSERT INTO RepairJob(repairjobId,car_license_no,time_in,time_out,emp_id,laborhrs)". "VALUES ('$max','$carno',CURRENT_TIMESTAMP,NULL,'$empid',NULL)";
 	$insert = oci_parse($conn, $sql4);
