@@ -39,11 +39,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
      $carmod = $_POST['carmod'];
      $carno = $_POST['carno'];
 	 $problem = $_POST['prob'];
-
 	echo "Your data has been added successfully";
 	PostToDB($name, $phone, $addr, $carno, $carmod, $problem);
 	echo "Your data has been added successfully";
-
 }
 function PostToDB($name, $phone, $addr, $carno, $carmod, $problem){
 	//connect to your database
@@ -52,8 +50,6 @@ function PostToDB($name, $phone, $addr, $carno, $carmod, $problem){
 	     print "<br> Connection to database failed. Please try again.";
         exit;
 	}
-
-
 	//SQL INSERT FOR CUSTOMERS TABLE
 	$sql1 = "INSERT INTO Customers VALUES('$phone','$name','$addr')";
 	$insert = oci_parse($conn, $sql1);
@@ -63,19 +59,15 @@ function PostToDB($name, $phone, $addr, $carno, $carmod, $problem){
 //	oci_bind_by_name($insert,':p3',$addr);
 	// Execute the insert statement
 	oci_execute($insert);
-
-
 	//SQL INSERT FOR CAR TABLE
 	$sql2 = "INSERT INTO Car (car_license_no,model,cphone)"."VALUES (:p4,:p5,:p6)";
 	$insert = oci_parse($conn, $sql2);
-
 	oci_bind_by_name($insert,':p4',$carno);
 	oci_bind_by_name($insert,':p5',$carmod);
 	oci_bind_by_name($insert,':p6',$phone);
 	// Execute the insert statement
 	oci_execute($insert);
 	
-
 	//SQL SWITCH FOR INSERT FOR PROBLEMSFIXED
 	switch ($problem) {
     case "Battery":
@@ -94,13 +86,10 @@ function PostToDB($name, $phone, $addr, $carno, $carmod, $problem){
 		$id=5;
 		break;
 	}
-
-
 	//GET THE MAX NUMBER FROM THE DATABASE FOR THE NEXT PROBLEM ID
 	$query = oci_parse($conn, "SELECT max(repairJobId) FROM RepairJob");
 	// Execute the query
 	oci_execute($query);
-
 	if (($row = oci_fetch_array($query, OCI_BOTH)) != false) {
 		$max = $row[0]+1;
 	}
@@ -109,10 +98,19 @@ function PostToDB($name, $phone, $addr, $carno, $carmod, $problem){
 		$max=1;
 	}
 
-
+	$query2 = oci_parse($conn, "SELECT emp_id FROM Mechanic");
+	oci_execute($query2);
+	$isFound = false;
+	$empid = 43;
+	while (($row = oci_fetch_array($query2, OCI_BOTH)) != false and $isFound == false) {
+		if(rand(0,1)==1){
+			$empid = $row[0];
+			$isFound = true;
+		}
+	}
 
 	//CREATE THE REPAIR JOB
-	$sql4 = "INSERT INTO RepairJob(repairjobId,car_license_no,time_in,time_out,emp_id,laborhrs)". "VALUES (:p8,:p4,CURRENT_TIMESTAMP,NULL,NULL,NULL,NULL)";
+	$sql4 = "INSERT INTO RepairJob(repairjobId,car_license_no,time_in,time_out,emp_id,laborhrs)". "VALUES ('$max','$carno',CURRENT_TIMESTAMP,NULL,'$empid',NULL)";
 	$insert = oci_parse($conn, $sql4);
 	// Execute the insert statement
 	oci_execute($insert);
@@ -121,13 +119,11 @@ function PostToDB($name, $phone, $addr, $carno, $carmod, $problem){
 	//SQL INSERT FOR PROBLEMFIXED TABLE
 	$sql3 = "INSERT INTO ProblemsFixed(repairjobId,problem_id)"."VALUES (:p7,:p8)";
 	$insert = oci_parse($conn, $sql3);
-
 	oci_bind_by_name($insert,':p7',$max);
 	oci_bind_by_name($insert,':p8',$id);
 	// Execute the insert statement
 	oci_execute($insert);
 	
-
 	//free all resources
 	oci_free_statement($insert);
 	
@@ -135,7 +131,6 @@ function PostToDB($name, $phone, $addr, $carno, $carmod, $problem){
 	//close SQL connection
 	oci_close($conn);
 }
-
 ?>
 <!-- end PHP script -->
    </body>
