@@ -1,16 +1,23 @@
 -- 1.3(e): function to show amount of money generated from customer billing 
 -- start/end dates given as parameters
--- dates are given in TIMESTAMP format: 'dd-mm-yy hh.mm.ss'
+-- dates are given in TIMESTAMP format: 'dd-mmm-yy hh.mm.ss'
 
 Create or Replace Function calcTotalBill (start_date IN TIMESTAMP, end_date IN TIMESTAMP)
 RETURN DECIMAL
 IS
 l_bill DECIMAL := 0.00;					/* individual bill amounts */
 l_total DECIMAL := 0.00;				/* total, initialised to 0 */
-BEGIN
-SELECT bill INTO l_bill FROM RepairLog
+CURSOR Log_cur IS
+Select bill FROM RepairLog
 WHERE time_out >= start_date AND time_out <= end_date;
+
+BEGIN
+-- NEED TO LOOP!!! vvv
+FOR l_emprec IN Emp_cur
+--OPEN Log_cur;
+--FETCH Log_cur INTO l_bill;
 l_total := l_total + l_bill;
+CLOSE Log_cur;
 /* return total value */
 RETURN l_total;
 END;
