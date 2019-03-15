@@ -98,8 +98,6 @@ function PostToDB($name, $phone, $addr, $carno, $carmod, $problem){
 
 	//GET THE MAX NUMBER FROM THE DATABASE FOR THE NEXT PROBLEM ID
 	$query = oci_parse($conn, "SELECT max(repairJobId) FROM RepairJob");
-
-	oci_bind_by_name($query,':bv',$num);
 	// Execute the query
 	oci_execute($query);
 
@@ -112,6 +110,14 @@ function PostToDB($name, $phone, $addr, $carno, $carmod, $problem){
 	}
 
 
+
+	//CREATE THE REPAIR JOB
+	$sql4 = "INSERT INTO RepairJob(repairjobId,car_license_no,time_in,time_out,emp_id,laborhrs)". "VALUES (:p8,:p4,CURRENT_TIMESTAMP,NULL,NULL,NULL,NULL)";
+	$insert = oci_parse($conn, $sql4);
+	// Execute the insert statement
+	oci_execute($insert);
+	
+	
 	//SQL INSERT FOR PROBLEMFIXED TABLE
 	$sql3 = "INSERT INTO ProblemsFixed(repairjobId,problem_id)"."VALUES (:p7,:p8)";
 	$insert = oci_parse($conn, $sql3);
@@ -120,14 +126,7 @@ function PostToDB($name, $phone, $addr, $carno, $carmod, $problem){
 	oci_bind_by_name($insert,':p8',$id);
 	// Execute the insert statement
 	oci_execute($insert);
-
-
-
-	//CREATE THE REPAIR JOB
-	$sql4 = "INSERT INTO RepairJob(repairjobId,car_license_no,time_in,time_out,emp_id,laborhrs)". "VALUES (:p8,:p4,CURRENT_TIMESTAMP,NULL,NULL,NULL,NULL)";
-	$insert = oci_parse($conn, $sql4);
-	// Execute the insert statement
-	oci_execute($insert);
+	
 
 	//free all resources
 	oci_free_statement($insert);
