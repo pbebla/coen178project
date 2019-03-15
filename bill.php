@@ -25,13 +25,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 function getFromDB($num){
 	//connect to your database
-	$conn=oci_connect('myeon','<password>', '//dbserver.engr.scu.edu/db11g');
+	$conn=oci_connect('','', '//dbserver.engr.scu.edu/db11g');
 	if(!$conn) {
 	     print "<br> connection failed:";
         exit;
 	}
 	//Parse the SQL query for bill
-	$query = oci_parse($conn, "SELECT bill FROM RepairLog where car_license_no= :bv");
+	$query = oci_parse($conn, "SELECT sum(bill) FROM RepairLog where car_license_no= :bv");
 
 	oci_bind_by_name($query,':bv',$num);
 	// Execute the query
@@ -41,7 +41,7 @@ function getFromDB($num){
 		// We can use either numeric indexed starting at 0
 		// or the column name as an associative array index to access the colum value
 		// Use the uppercase column names for the associative array indices
-		$bill = $row['BILL'];
+		$bill = $row[0];
 	}
 	else {
 		exit("I'm sorry but your bill is not generated yet\n");

@@ -11,7 +11,7 @@
 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
   Please give us your car license number: <input type="text" name="num" id="num">
   <input type="submit" value="Submit">
- </form>
+</form>
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     # collect input data
@@ -20,12 +20,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
      if (!empty($num)){
 		$num = prepareInput($num);
 		$data = getFromDB($num);
-		echo "Total pay for hours worked on for your car are: $data<br>\n";
+		echo "Total pay for hours worked on for your car are:$ $data[0]<br>\n Maximum Labor Hours: $data[1] $data[2]\n Minimum Labor Hours: $data[3] $data[4]\n";
+		echo "<br> Averages:<br>";
+		$x=0;
+		while($x<sizeof($data[5])){
+			echo $data[5][$x]." ".$data[6][$x];
+			echo "<br>";
+			$x=$x+1;
+		}
+	
 	 }
 }
 function getFromDB($num){
 	//connect to your database
-	$conn=oci_connect('myeon','<password>', '//dbserver.engr.scu.edu/db11g');
+	$conn=oci_connect('','', '//dbserver.engr.scu.edu/db11g');
 	if(!$conn) {
 	     print "<br> connection failed:";
         exit;
@@ -46,10 +54,42 @@ function getFromDB($num){
 	else {
 		exit("I'm sorry but that license number is incorrect\n");
 	}
+	
+	$q2 = oci_parse($conn,"select s.emp_id, mname, Hours from (select emp_id, sum(laborhrs) Hours from RepairJob group by emp_id) s, Mechanic where Mechanic.emp_id = s.emp_id and Hours = (select min(Hours) from (select emp_id, sum(laborhrs) Hours from RepairJob group by emp_id))");
+	oci_execute($q2);
+	if (($row = oci_fetch_array($q2, OCI_BOTH)) != false) {
+		// We can use either numeric indexed starting at 0
+		// or the column name as an associative array index to access the colum value
+		// Use the uppercase column names for the associative array indices
+		$minname = $row[1];
+		$minnum = $row[2];
+	}
+	
+	$q2 = oci_parse($conn,"select s.emp_id, mname, Hours from (select emp_id, sum(laborhrs) Hours from RepairJob group by emp_id) s, Mechanic where Mechanic.emp_id = s.emp_id and Hours = (select max(Hours) from (select emp_id, sum(laborhrs) Hours from RepairJob group by emp_id))");
+	oci_execute($q2);
+	if (($row = oci_fetch_array($q2, OCI_BOTH)) != false) {
+		// We can use either numeric indexed starting at 0
+		// or the column name as an associative array index to access the colum value
+		// Use the uppercase column names for the associative array indices
+		$maxname = $row[1];
+		$maxnum = $row[2];
+	}
+
+	$q2 = oci_parse($conn,"select s.emp_id, mname, AvgHours from (select emp_id, avg(laborhrs) AvgHours from RepairJob group by emp_id) s, Mechanic where Mechanic.emp_id = s.emp_id");
+	oci_execute($q2);
+	$i=0;
+	while(($row = oci_fetch_array($q2, OCI_BOTH)) != false) {
+		// We can use either numeric indexed starting at 0
+		// or the column name as an associative array index to access the colum value
+		// Use the uppercase column names for the associative array indices
+		$avgname[$i] = $row[1];
+		$avghrs[$i] = $row[2];
+		$i=$i+1;
+	}
 	oci_free_statement($query);
 	oci_close($conn);
 
-	return $total*20;
+	return array($total*20,$maxname,$maxnum, $minname, $minnum, $avgname, $avghrs);
 }
 
 function prepareInput($inputData){

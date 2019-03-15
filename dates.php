@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
      $start = $_POST['start'];
 	 $end = $_POST['end'];
 	 $data = getFromDB($start,$end);
-	 echo "Total amount from bills between those dates is: $data<br>\n";
+	 echo "Total amount from bills between those dates is:$ $data<br>\n";
 
 }
 
@@ -35,9 +35,11 @@ function getFromDB($start,$end){
 	}
 	//Parse the SQL query for RepairJobs
 	//$sql = "SELECT calcTotalBill(':s',':e') from dual";
-	$query = oci_parse($conn, "SELECT calcTotalBill(:s,:e) from dual");
-	oci_bind_by_name($query,':s',$start);
-	oci_bind_by_name($query,':e',$end);
+	$t1="timestamp'$start'";
+	$t2="timestamp'$end'";
+	$query = oci_parse($conn, "SELECT calcTotalBill($t1,$t2) from dual");
+	//oci_bind_by_name($query,':s',$start);
+	//oci_bind_by_name($query,':e',$end);
 	// Execute the query
 	oci_execute($query);
 
