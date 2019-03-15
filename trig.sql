@@ -20,7 +20,8 @@ ELSE
 END IF;  
 
 insert into repairlog values (:old.repairjobid,:old.car_license_no,:old.time_in,:new.time_out,:old.emp_id,:old.laborhrs,r_bill);
-
+delete from RepairJob where repairjobId=:new.repairjobId;
+				     
 dbms_output.put_line('The Bill is: '||r_bill);
 
 END;
