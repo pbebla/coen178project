@@ -11,7 +11,7 @@ last_service_date TIMESTAMP;
 BEGIN
 Select sum(cost) into pcost from Parts where pname in (select pname from PartsUsed where repairjobId=:old.repairjobid);
 
---Select MAX(time_out) into last_service_date from RepairLog inner join Car where RepairLog.car_license_no=Car.car_license_no;
+Select MAX(time_out) into last_service_date from RepairLog where car_license_no in (Select car_license_no from Car);
 
 IF (last_service_date > (:new.time_out - 365)) then
 	r_bill := 0.9*(30 + pcost + (25*:old.laborhrs));
