@@ -10,16 +10,12 @@
 </header>
 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
   Enter a start date: <input type="text" name="start" id="start">
- </form>
  <br/>
- <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
   Enter an end date: <input type="text" name="end" id="end">
- </form>
  <br/>
-<form>
 	<input type="submit" value="Submit">
  </form>
-<br/>
+
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     # collect input data
@@ -32,13 +28,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 function getFromDB($start,$end){
 	//connect to your database
-	$conn=oci_connect('myeon','mamaluigi1', '//dbserver.engr.scu.edu/db11g');
+	$conn=oci_connect('','', '//dbserver.engr.scu.edu/db11g');
 	if(!$conn) {
 	     print "<br> connection failed:";
         exit;
 	}
 	//Parse the SQL query for RepairJobs
-	$query = oci_parse($conn, "SELECT calcTotalBill(:s,:e)");
+	//$sql = "SELECT calcTotalBill(':s',':e') from dual";
+	$query = oci_parse($conn, "SELECT calcTotalBill(:s,:e) from dual");
 	oci_bind_by_name($query,':s',$start);
 	oci_bind_by_name($query,':e',$end);
 	// Execute the query
