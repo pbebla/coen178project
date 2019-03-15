@@ -83,7 +83,7 @@ function PostToDB($name, $phone, $addr, $carno, $carmod, $problem){
 		break;
 	}
 	//GET THE MAX NUMBER FROM THE DATABASE FOR THE NEXT PROBLEM ID
-	$query = oci_parse($conn, "SELECT max(repairJobId) FROM RepairJob");
+	$query = oci_parse($conn, "SELECT max(repairJobId) FROM RepairJob,RepairLog");
 	// Execute the query
 	oci_execute($query);
 	if (($row = oci_fetch_array($query, OCI_BOTH)) != false) {
