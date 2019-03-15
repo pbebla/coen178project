@@ -41,6 +41,8 @@ function getFromDB($start,$end){
 	// Execute the query
 	oci_execute($query);
 
+
+
 	if (($row = oci_fetch_array($query, OCI_BOTH)) != false) {
 		// We can use either numeric indexed starting at 0
 		// or the column name as an associative array index to access the colum value
@@ -50,6 +52,7 @@ function getFromDB($start,$end){
 	else {
 		exit("I'm sorry but no bill exists in the database\n");
 	}
+
 	oci_free_statement($query);
 	oci_close($conn);
 
